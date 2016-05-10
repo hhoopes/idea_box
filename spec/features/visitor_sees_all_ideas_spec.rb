@@ -17,19 +17,21 @@ feature "visitor visits index", :js => true do
     expect(page).to have_selector("li", count: 5)
   end
 
-  xscenario "ideas are sorted recent at top" do
+  scenario "ideas are sorted recent at top" do
     idea = create(:idea)
 
     visit '/'
     wait_for_ajax
 
-    expect("li:first-child").to have_content(idea.title)
+    within("li:first-child"){ expect(page).to have_content(idea.title)}
+    within("li:first-child"){ expect(page).to have_content(idea.body)}
 
     new_idea = create(:idea)
 
     visit '/'
     wait_for_ajax
 
-    expect("li:first-child").to have_content(new_idea.title)
+    within("li:first-child"){ expect(page).to have_content(new_idea.title)}
+    within("li:first-child"){ expect(page).to have_content(new_idea.body)}
   end
 end

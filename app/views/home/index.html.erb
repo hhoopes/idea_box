@@ -1,6 +1,24 @@
-<h1>Idea Box</h1>
+<div class="container">
 
-<ul>
-  <div id="ideas">
-  </div>
-</ul>
+  <h1>Idea Box</h1>
+
+    <form class="form-inline">
+      <div class="form-group">
+        <label class="sr-only" for="title">Idea Title</label>
+        <input type="text" class="form-control" id="title" placeholder="Title of your idea">
+      </div>
+      <p>
+      <div class="form-group">
+        <label class="sr-only" for="body">Idea Body</label>
+        <textarea class="form-control" rows="3" id="body" placeholder="Description of your idea"></textarea>
+      </div>
+      <p>
+        <button type="submit" id="idea-save" class="btn btn-primary">Save</button>
+      </p>
+    </form>
+
+  <ul class="list-group">
+    <div id="ideas">
+    </div>
+  </ul>
+</div>

@@ -11,6 +11,7 @@ gem 'figaro'
 gem 'pg'
 gem 'responders', '~> 2.0'
 gem 'selenium-webdriver'
+gem 'faker'
 
 group :development, :test do
   gem 'pry'
@@ -19,7 +20,6 @@ group :development, :test do
   gem 'capybara'
   gem 'database_cleaner'
   gem 'factory_girl_rails', '~> 4.0'
-  gem 'faker'
   gem 'launchy'
 end
 
