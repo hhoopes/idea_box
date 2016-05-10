@@ -14,3 +14,36 @@
 //= require jquery_ujs
 //= require_tree .
 //= require bootstrap-sprockets
+
+$(document).ready(function(){
+  loadIdeas();
+
+})
+
+function loadIdeas(){
+  return $.getJSON('/api/v1/ideas').then(function (ideas) {
+    addIdeasToPage(ideas);
+  })
+}
+
+function addIdeasToPage(ideas) {
+  var renderedIdeas = ideas.map(renderIdea);
+  $("#ideas").append(renderedIdeas);
+}
+
+function renderIdea(idea) {
+  return $(
+    '<li><h2>'
+    + idea.title
+    + '<span class="quality small">'
+      + idea.quality
+      + "</span></h2>"
+    + '<p>'
+    + truncateText(idea.body)
+    + '</p></li>').addClass("idea-"
+    + idea.id);
+}
+
+function truncateText(text) {
+  return jQuery.trim(text).substring(0, 100).split(" ").join(" ")
+}

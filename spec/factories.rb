@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :idea do
-    title "MyString"
-    body "MyString"
+    sequence(:title) { |n| "Idea ##{n}" }
+    sequence(:body) { |n| "Descriptive text about this idea #{n}" }
     quality 1
   end
 end
