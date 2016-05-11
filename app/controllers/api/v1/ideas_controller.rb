@@ -9,6 +9,10 @@ module Api
         respond_with Idea.create(idea_params), location: nil
       end
 
+      def destroy
+        respond_with Idea.destroy(params[:id])
+      end
+
       private
         def idea_params
           params.require(:idea).permit(:title, :body, :quality)

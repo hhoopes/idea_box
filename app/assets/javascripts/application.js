@@ -17,7 +17,8 @@
 
 $(document).ready(function(){
   loadIdeas();
-  $("#idea-save").on('click', createIdea)
+  $("#idea-save").on('click', createIdea);
+  $("body").on("click", "p#idea-delete", deleteIdea);
 })
 
 function loadIdeas(){
@@ -29,13 +30,27 @@ function loadIdeas(){
 function createIdea(){
   var ideaParams = {idea: {title: $("#title").val(), body: $("#body").val()}}
 
-var created =  $.ajax({
+  $.ajax({
     url: "/api/v1/ideas.json",
     method: "POST",
     dataType: "json",
     data: ideaParams,
     success: function(idea){
       addIdeasToPage(idea)
+    }
+  })
+}
+
+function deleteIdea(){
+  console.log("Clicked!")
+
+  var ideaId = $(this).parents(".idea").data("idea-id");
+
+  $.ajax({
+    url: "/api/v1/ideas/" + ideaId + ".json",
+    method: "DELETE",
+    success: function(){
+      $(".idea[data-idea-id=" + ideaId + "]").remove();
     }
   })
 }
@@ -47,7 +62,10 @@ function addIdeasToPage() {
 
 function renderIdea(idea) {
   return $(
-    '<li><h2>'
+    '<li class="row idea" data-idea-id='
+    + idea.id
+    + '><div class="col-md-1 icons"><p id="idea-delete" class="btn btn-link glyphicon glyphicon-remove red"></p><p class="glyphicon glyphicon-thumbs-up"></p><p class="glyphicon glyphicon-thumbs-down"></p></div>'
+    + '<div class="col-md-11"><h2>'
     + idea.title
     + '<span class="label label-default label-pill pull-xs-right quality '
     + idea.quality
@@ -56,8 +74,7 @@ function renderIdea(idea) {
     + "</span></h2>"
     + '<p class="idea-body">'
     + truncateText(idea.body)
-    + '</p></li>').addClass("list-group-item idea-"
-    + idea.id);
+    + '</p></div></li>').addClass("list-group-item idea");
 }
 
 function truncateText(text) {
