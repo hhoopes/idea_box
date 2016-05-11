@@ -9,10 +9,8 @@ feature "visitor deletes an idea", :js => true do
     within("li:first-child") {
       expect(page).to have_content(idea.title)
       expect(page).to have_content(idea.body)
-    }
 
-    within("li:first-child") {
-      find("#idea-delete").click
+      find(".idea-delete").click
       wait_for_ajax
       expect(page).not_to have_content(idea.title)
       expect(page).not_to have_content(idea.body)
