@@ -4,6 +4,10 @@ $(document).ready(function(){
   $("body").on("click", "p.idea-delete", deleteIdea);
   $("body").on("click", "p.idea-downvote", downvoteIdeaQuality);
   $("body").on("click", "p.idea-upvote", upvoteIdeaQuality);
+  $("body").on("blur", "h2", updateTitle);
+  $("body").on("keydown", "h2", checkKeyDown);
+  $("body").on("blur", "p.idea-body", updateBody);
+  $("body").on("keydown", "p.idea-body", checkKeyDown);
 })
 
 var qualityMapping = {0:"swill", 1:"plausible", 2:"genius" };
@@ -11,6 +15,54 @@ var qualityMapping = {0:"swill", 1:"plausible", 2:"genius" };
 function loadIdeas(){
   return $.getJSON('/api/v1/ideas').then(function (ideas) {
     addIdeasToPage(ideas);
+  })
+}
+
+function checkKeyDown(e){
+  var keyedThis = this;
+  if (e.keyCode === 13) {
+    e.preventDefault();
+    if (this.tagName == "H2"){
+      updateTitle(keyedThis)
+    } else if (this.tagName == "P"){
+      updateBody(keyedThis)
+    }
+  }
+}
+
+function updateBody(keyedThis){
+  if (keyedThis.tagName === "P" ) {
+    var context = keyedThis;
+    $(context).blur()
+  } else {
+    var context = this;
+  }
+  var ideaId = $(context).parent().parent().attr("id");
+  var newBody = $(context).text();
+
+  $.ajax({
+    url: "/api/v1/ideas/" + ideaId + ".json",
+    method: "PUT",
+    dataType: "json",
+    data: {idea: {body: newBody }}
+  })
+}
+
+function updateTitle(keyedThis){
+  if (keyedThis.tagName === "H2" ) {
+    var context = keyedThis;
+    $(context).blur()
+  } else {
+    var context = this;
+  }
+  var ideaId = $(context).parent().parent().attr("id");
+  var newTitle = $(context).text();
+
+  $.ajax({
+    url: "/api/v1/ideas/" + ideaId + ".json",
+    method: "PUT",
+    dataType: "json",
+    data: {idea: {title: newTitle }}
   })
 }
 
@@ -35,7 +87,7 @@ function upvoteIdeaQuality(){
   var that = this
   var ideaId = $(this).parent().parent(".idea").attr("id")
   var quality = $(this).parent().parent(".idea").attr("quality")
-debugger;
+
   switch (quality) {
     case "genius":
       break;
@@ -49,6 +101,7 @@ debugger;
 }
 
 function updateQuality(ideaId, newQuality, that){
+  debugger;
   changeQualityTag(ideaId, newQuality, that)
   $.ajax({
     url: "/api/v1/ideas/" + ideaId + ".json",
@@ -60,9 +113,8 @@ function updateQuality(ideaId, newQuality, that){
 
 function changeQualityTag(ideaId, newQuality, that){
   $(that).parents().children("#" + ideaId).attr('quality', qualityMapping[newQuality])
-  debugger;
-  $(that).parents().children("#" + ideaId).children().children("h2").children("span").text(qualityMapping[newQuality])
-  $(that).parents().children("#" + ideaId).children().children("h2").children("span").removeClass("swill genius plausible").addClass(qualityMapping[newQuality])
+  $(that).parent().parent().find("span.quality").text(qualityMapping[newQuality])
+  $(that).parent().parent().find(".quality").removeClass("swill genius plausible").addClass(qualityMapping[newQuality])
 }
 
 function createIdea(){
@@ -102,14 +154,14 @@ function renderIdea(idea) {
     + ' quality='
     + idea.quality
     + '><div class="col-md-1 icons"><p class="idea-delete btn btn-link glyphicon glyphicon-remove red"></p><p class="glyphicon glyphicon-thumbs-up idea-upvote"></p><p class="glyphicon glyphicon-thumbs-down idea-downvote"></p></div>'
-    + '<div class="col-md-11"><h2>'
+    + '<div class="col-md-11"><h2 contentEditable=true>'
     + idea.title
-    + '<span class="label label-default label-pill pull-xs-right quality '
+    + '</h2><span class="label label-default label-pill pull-xs-right quality '
     + idea.quality
     + '">'
     + idea.quality
-    + "</span></h2>"
-    + '<p class="idea-body">'
+    + "</span>"
+    + '<p class="idea-body" contentEditable=true>'
     + truncateText(idea.body)
     + '</p></div></li>').addClass("list-group-item idea");
 }
