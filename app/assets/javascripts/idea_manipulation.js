@@ -8,6 +8,8 @@ $(document).ready(function(){
   $("body").on("keydown", "h2", checkKeyDown);
   $("body").on("blur", "p.idea-body", updateBody);
   $("body").on("keydown", "p.idea-body", checkKeyDown);
+  $("#search").on("keyup", filterIdeas)
+
 })
 
 var qualityMapping = {0:"swill", 1:"plausible", 2:"genius" };
@@ -15,6 +17,17 @@ var qualityMapping = {0:"swill", 1:"plausible", 2:"genius" };
 function loadIdeas(){
   return $.getJSON('/api/v1/ideas').then(function (ideas) {
     addIdeasToPage(ideas);
+  })
+}
+
+function filterIdeas(){
+  var searchTerm = $(this).val().toLowerCase();
+
+  $(".idea").each(function(index, idea){
+    var title = $(this).children().children(".idea-title").text().toLowerCase();
+    var body = $(this).children().children(".idea-body").text().toLowerCase();
+    (title.indexOf(searchTerm) >= 0 || body.indexOf(searchTerm) >= 0) ?
+      $(idea).show() : $(idea).hide();
   })
 }
 
@@ -154,7 +167,7 @@ function renderIdea(idea) {
     + ' quality='
     + idea.quality
     + '><div class="col-md-1 icons"><p class="idea-delete btn btn-link glyphicon glyphicon-remove red"></p><p class="glyphicon glyphicon-thumbs-up idea-upvote"></p><p class="glyphicon glyphicon-thumbs-down idea-downvote"></p></div>'
-    + '<div class="col-md-11"><h2 contentEditable=true>'
+    + '<div class="col-md-11"><h2 class=idea-title contentEditable=true>'
     + idea.title
     + '</h2><span class="label label-default label-pill pull-xs-right quality '
     + idea.quality
