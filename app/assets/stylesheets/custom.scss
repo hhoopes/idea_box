@@ -7,6 +7,8 @@ span.quality {
   color: #FFF;
   margin-left: 20px;
   padding: 4px;
+  font-size: 120%;
+  // vertical-align: text-bottom;;
 }
 
 span.swill {
@@ -28,6 +30,9 @@ h1 {
   font-variant: small-caps;
 }
 
+h2 {
+  display:inline-block;
+}
 .idea-body {
   font-style: italic;
 }
