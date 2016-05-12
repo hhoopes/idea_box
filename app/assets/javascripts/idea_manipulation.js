@@ -15,11 +15,10 @@ function loadIdeas(){
 }
 
 function downvoteIdeaQuality(){
-  console.log("Hit this")
   var that = this
-  var ideaId = $(this).parents().children(".idea").attr("id")
-  var quality = $(this).parents().children(".idea").attr("quality")
-debugger;
+  var ideaId = $(this).parent().parent(".idea").attr("id")
+  var quality = $(this).parent().parent(".idea").attr("quality")
+
   switch (quality) {
     case "genius":
       updateQuality(ideaId, "1", that)
@@ -34,9 +33,9 @@ debugger;
 
 function upvoteIdeaQuality(){
   var that = this
-  var ideaId = $(this).parents().children(".idea").attr("id")
-  var quality = $(this).parents().children(".idea").attr("quality")
-
+  var ideaId = $(this).parent().parent(".idea").attr("id")
+  var quality = $(this).parent().parent(".idea").attr("quality")
+debugger;
   switch (quality) {
     case "genius":
       break;
@@ -61,6 +60,7 @@ function updateQuality(ideaId, newQuality, that){
 
 function changeQualityTag(ideaId, newQuality, that){
   $(that).parents().children("#" + ideaId).attr('quality', qualityMapping[newQuality])
+  debugger;
   $(that).parents().children("#" + ideaId).children().children("h2").children("span").text(qualityMapping[newQuality])
   $(that).parents().children("#" + ideaId).children().children("h2").children("span").removeClass("swill genius plausible").addClass(qualityMapping[newQuality])
 }
@@ -80,7 +80,7 @@ function createIdea(){
 }
 
 function deleteIdea(){
-  var ideaId = $(this).parents().children(".idea").attr("id")
+  var ideaId = $(this).parent().parent(".idea").attr("id")
     $.ajax({
     url: "/api/v1/ideas/" + ideaId + ".json",
     method: "DELETE",
