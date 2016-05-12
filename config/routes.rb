@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :ideas, except: [:new, :edit]
+      resources :ideas, except: [:new, :edit, :show]
     end
   end
 end
