@@ -4,6 +4,7 @@ $(document).ready(function(){
   $("body").on("click", "p.idea-delete", deleteIdea);
   $("body").on("click", "p.idea-downvote", downvoteIdeaQuality);
   $("body").on("click", "p.idea-upvote", upvoteIdeaQuality);
+  setInterval(loadIdeas, 100)
 })
 
 var qualityMapping = {0:"swill", 1:"plausible", 2:"genius" };
